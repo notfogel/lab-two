@@ -51,11 +51,8 @@ window.onload = function(){
     });
     //scale for birbles center y coordin8
     var y = d3.scaleLinear()
-        .range([440,95])
-        .domain([
-            minPop,
-            maxPop
-        ]);
+        .range([450,50])
+        .domain([0,700000]);
     var color = d3.scaleLinear()
         .range([
             "#FDBE85",
@@ -90,4 +87,10 @@ window.onload = function(){
             return color(d.population)
         })
         .style("stroke","#000") //birble stroke = black
+    var yAxis = d3.axisLeft(y); //creates y axis
+    var axis = container.append("g")
+        .attr("class","axis")
+        .attr("transform","translate(50,0)") //makes the axis actually visible w/in the svg by pushing it to the right 50px
+        .call(yAxis);
+        
 };
