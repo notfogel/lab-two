@@ -38,7 +38,34 @@ window.onload = function(){
         .attr("x",50)//position from left on the x (horiz) axis i guess
         .attr("y",50)//you'll never believe what this one is
         .style("fill","#702963"); //fill color = #702963 (byzantium purple)
-
+    var x = d3.scaleLinear() //cre8 da scale
+        .range([90,810]) //output min/max
+        .domain([0,3]) //input min/max
+    //find minval of array:
+    var minPop = d3.min(cityPop,function(d){
+        return d.population;
+    });
+    //find array's max val:
+    var maxPop = d3.max(cityPop,function(d){
+        return d.population;
+    });
+    //scale for birbles center y coordin8
+    var y = d3.scaleLinear()
+        .range([440,95])
+        .domain([
+            minPop,
+            maxPop
+        ]);
+    var color = d3.scaleLinear()
+        .range([
+            "#FDBE85",
+            "#D94701"
+        ])
+        .domain([
+            minPop, 
+            maxPop
+        ]);            
+        
     var circles = container.selectAll(".circles") //ay dios mio! todavia no hay circulos!
         .data(cityPop) //here we feed in an array
         .enter() //one of the great mysteries of the universe (???)
@@ -52,12 +79,15 @@ window.onload = function(){
             return Math.sqrt(area/Math.PI);
         })
         .attr("cx",function(d,i){ //xcoordinate
-            //use index to place each birble horizontally
-            return 90 + (i*180);
+            //use scale gener8or w/ da index to place each birble horizontally
+            return x(i);
         })
         .attr("cy",function(d){ //ycoordin8
             //subtracc value from 450 to grow birbles up from the btm up
-            return 450 - (d.population*0.0005);
-        });
-    
+            return y(d.population);
+        })
+        .style("fill",function(d,i){
+            return color(d.population)
+        })
+        .style("stroke","#000") //birble stroke = black
 };
