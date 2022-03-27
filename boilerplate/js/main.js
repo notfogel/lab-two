@@ -1,7 +1,24 @@
 //SVG dimension variables
 var w = 900, h = 500;
-
-//execute script when window is loaded
+var dataArray = [10, 20, 30, 40, 50];
+var cityPop = [
+    { 
+        city: 'Madison',
+        population: 233209
+    },
+    {
+        city: 'Milwaukee',
+        population: 594833
+    },
+    {
+        city: 'Green Bay',
+        population: 104057
+    },
+    {
+        city: 'Superior',
+        population: 27244
+    }
+];
 window.onload = function(){
     var container = d3.select("body") //cop the <body> element from the DOM
         .append("svg") //put a new svg in the body ody ody ody ody ody ody 
@@ -22,5 +39,25 @@ window.onload = function(){
         .attr("y",50)//you'll never believe what this one is
         .style("fill","#702963"); //fill color = #702963 (byzantium purple)
 
-    console.log(innerRect);
+    var circles = container.selectAll(".circles") //ay dios mio! todavia no hay circulos!
+        .data(cityPop) //here we feed in an array
+        .enter() //one of the great mysteries of the universe (???)
+        .append("circle") //add a circle for each datum
+        .attr("class", "circles") //apply a class name to all circles
+        .attr("id",function(d){ 
+            return d.city;
+        })
+        .attr("r",function(d){ //calcul8 radii based on popn values
+            var area = d.population*0.01;
+            return Math.sqrt(area/Math.PI);
+        })
+        .attr("cx",function(d,i){ //xcoordinate
+            //use index to place each birble horizontally
+            return 90 + (i*180);
+        })
+        .attr("cy",function(d){ //ycoordin8
+            //subtracc value from 450 to grow birbles up from the btm up
+            return 450 - (d.population*0.0005);
+        });
+    
 };
