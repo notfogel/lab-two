@@ -20,8 +20,10 @@ function setMap(){
         .center([0, 43.073280])
         .rotate([-89.400600, 0, 0]) //this might need to be a positive 89 for some reason but just making a note
         .parallels([33, 53]) 
-        .scale(5000) //higher number good for me since my scale is real small (it's just Madison after all!)
-        .translate([width / 480, height / 230]); //"Keep these as one-half the <svg> width and height to keep your map centered in the container."
+        .scale(50000) //higher number good for me since my scale is real small (it's just Madison after all!)
+        //I thought maybe scale needed to be way higher bc stuff wasn't showing up and dimensions seemed small when inspecting
+        //however, no matter how high I made the number, the map still did not show up (dimensions did change tho which is good)
+        .translate([width/2, height/2]); //"Keep these as one-half the <svg> width and height to keep your map centered in the container."
     
     //something something synchronous promises
     var promises = [];
