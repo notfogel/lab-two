@@ -1,15 +1,15 @@
-﻿id,Name,Count,% of total,% white,% nonwhite,% house,% apartment
-1,Very Near East Side,45,17.51%,63.7,11.5,25,70.5
-2,Langdon,19,7.39%,73.8,15.9,26.3,68.4
-3,State Street,27,10.51%,70.4,18.5,3.7,96.3
-4,The Elbow,17,6.61%,82.3,23.6,17.6,82.4
-5,Miffland,16,6.23%,87.6,12.6,37.5,62.5
-6,Miffland South,21,8.17%,95,5,42.9,52.4
-7,Future Humanities Building,5,1.95%,60,40,0,100
-8,Sophomore Slums,6,2.33%,66.7,33.4,16.7,83.3
-9,Rectangle Village,18,7.00%,89,11.2,5.6,94.4
-10,Greenbush,30,11.67%,80,16.6,63.3,36.7
-11,Vilas,11,4.28%,72.8,9.1,36.4,63.6
-12,MonRegent,4,1.56%,60,20,40,40
-13,Regent,20,7.78%,90,10,50,50
-14,Forgotten Triangle,18,7.00%,88.9,5.6,33.3,66.7
+﻿id,Name,Count,Percent of total,Percent white,Percent nonwhite,Percent house,Percent apartment
+1,Very Near East Side,45,17.51,63.7,11.5,25,70.5
+2,Langdon,19,7.39,73.8,15.9,26.3,68.4
+3,State Street,27,10.51,70.4,18.5,3.7,96.3
+4,The Elbow,17,6.61,82.3,23.6,17.6,82.4
+5,Miffland,16,6.23,87.6,12.6,37.5,62.5
+6,Miffland South,21,8.17,95,5,42.9,52.4
+7,Future Humanities Building,5,1.95,60,40,0,100
+8,Sophomore Slums,6,2.33,66.7,33.4,16.7,83.3
+9,Rectangle Village,18,7.00,89,11.2,5.6,94.4
+10,Greenbush,30,11.67,80,16.6,63.3,36.7
+11,Vilas,11,4.28,72.8,9.1,36.4,63.6
+12,MonRegent,4,1.56,60,20,40,40
+13,Regent,20,7.78,90,10,50,50
+14,Forgotten Triangle,18,7.00,88.9,5.6,33.3,66.7

@@ -45,6 +45,8 @@ function setMap(){
             campus = data[2],
             water = data[3];
         
+        console.log(csvData)
+        console.log(campus)
         //translate the topojsons to geojson (waste of time alert)
         var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit),
             madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features,
