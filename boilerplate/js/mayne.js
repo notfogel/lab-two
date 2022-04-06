@@ -18,13 +18,12 @@ function setMap(){
     //create Albers equal area conic projection centered on Madison!
     var projection = d3.geoAlbers()
         .center([0, 43.073280])
-        .rotate([-89.400600, 0, 0]) 
+        .rotate([-89.400600, 0, 0]) //this might need to be a positive 89 for some reason but just making a note
         .parallels([33, 53]) 
-        .scale(5000) //"is a factor by which distances between points are multiplied, increasing or decreasing the scale of the map." 
-        //will have to figure out which way to adjust the .scale lol
-        .translate([width / 2, height / 2]); //"Keep these as one-half the <svg> width and height to keep your map centered in the container."
+        .scale(5000) //higher number good for me since my scale is real small (it's just Madison after all!)
+        .translate([width / 480, height / 230]); //"Keep these as one-half the <svg> width and height to keep your map centered in the container."
     
-        //something something synchronous promises
+    //something something synchronous promises
     var promises = [];
     promises.push(d3.csv("data/lab2_quant_data.csv")); //load that csv!!!
     promises.push(d3.json("data/madison_city_limit.topojson")); //load that yung background data
@@ -37,13 +36,13 @@ function setMap(){
     var path = d3.geoPath()
         .projection(projection);
 
-
+/*
     //use Promise.all to parallelize asynchronous data loading (ok this block seems redundant for sure lol FUCK)
     var promises = [d3.csv("data/lab2_quant_data.csv"),                    
                     d3.json("data/madison_city_limit.topojson"),
                     d3.json("data/madison_neighborhood_polygonz.topojson")                   
     ];    
-    Promise.all(promises).then(callback);
+    Promise.all(promises).then(callback); */
 
     function callback(data){
         var csvData = data[0],
@@ -52,13 +51,13 @@ function setMap(){
         
         //translate the topojsons to geojson (waste of time alert)
         var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit),
-            madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz);    
+            madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features;    
         
         
         //add madison's city limitz to the map
         var cityLimitz = map.append("path")
             .datum(madisonBoundariez)
-            .attr("class", "boundary")
+            .attr("class", "cityLimitz")
             .attr("d", path);
         //add near-campus neighborhoodz to said map
         var neighborhoodz = map.selectAll(".neighborhoodz")
@@ -66,7 +65,8 @@ function setMap(){
             .enter()
             .append("path")
             .attr("class", function(d){
-                return "neighborhoodz " + d.properties.id; 
+                return "neighborhoodz " + d.properties.id; //I'm wondering if this ID bullshit is causing all this
+                //but it shouldn't be!! both the topojson and the csv have it as a property. grrrrrrrrrrr
             })
             .attr("d", path);
     
