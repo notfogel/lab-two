@@ -11,7 +11,8 @@ function setMap(){
 
     function callback(data){
         var csvData = data[0],
-            neighborhoodz = data[1];
+            madtown = data[1];
+        var neighborhoodz = topojson.feature(madtown, madtown.objects.madison_neighborhood_polygonz);    
         console.log(csvData);
         console.log(neighborhoodz);
     }
