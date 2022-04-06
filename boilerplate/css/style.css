@@ -1,10 +1,14 @@
 .cityLimitz {
-    fill: none;
+    fill: purple;
+    opacity: 50%;
     stroke: black;
     stroke-width: 2px;
 }
 .neighborhoodz{
-    fill: black;
+    fill: none;
     stroke: black;
-    stroke-width: 2px;
+    stroke-width: 3px;
+}
+.lakez {
+    fill: #AED8DB;
 }
