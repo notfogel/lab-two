@@ -16,3 +16,6 @@
     stroke: black;
     stroke-width: 2px;
 } */
+.map {
+    border: medium solid #999;
+}
