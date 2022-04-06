@@ -52,7 +52,31 @@ function setMap(){
             madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features,
             madisonWater = topojson.feature(water, water.objects.madison_water);
         
-        
+        //varz for data join
+        var attrArray = ["Count","Percent of total", "Percent white", "Percent nonwhite", "Percent house", "Percent apartment"];
+
+        //loop thru csv to assign each set of csv attributes to a geojson neighborhood
+        for(var i=0; i<csvData.length; i++){
+            var csvNeighborhood = csvData[i]; //current neighborhood
+            var csvKey = csvNeighborhood.id;
+            //(this should b fun) loop thru geojson neighborhoodz to find the current one
+            for(var a=0; a<madisonNeighborhoodz.length; a++){
+
+                var geojsonProps = madisonNeighborhoodz[a].properties; //the current geojson properties
+                var geojsonKey = geojsonProps.id; //the geojson primary key
+
+                //where primary keyz match, transfer csv data to geojson properties object 
+                if(geojsonKey==csvKey){
+
+                    //assign all attributes & values
+                    attrArray.forEach(function(attr){
+                        var val = parseFloat(csvNeighborhood[attr]); //cop that csv attr value
+                        geojsonProps[attr] = val; //assign attribute & value to geojson properties
+                    });
+                };
+            };
+        };
+        console.log(madisonNeighborhoodz)
         //add madison's city limitz to the map
         var cityLimitz = map.append("path")
             .datum(madisonBoundariez)
