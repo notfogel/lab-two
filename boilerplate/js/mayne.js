@@ -1,5 +1,5 @@
 //begin da script when window loads
-window.onload = setMap();
+//window.onload = setMap();
 
 //set up a choropleth map
 function setMap(){
@@ -69,7 +69,7 @@ function setMap(){
             .attr("class", function(d){
                 return "neighborhoodz " + d.properties.id; //I'm wondering if this ID bullshit is causing all this
                 //but it shouldn't be!! both the topojson and the csv have it as a property. grrrrrrrrrrr
-            })
+            }) 
             .attr("d", path);
     
     
@@ -77,3 +77,4 @@ function setMap(){
     
     }
 };
+document.addEventListener('DOMContentLoaded',setMap)
