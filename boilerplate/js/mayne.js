@@ -5,8 +5,8 @@ window.onload = setMap();
 function setMap(){
     
     //map frame dimensions
-    var width = 960,
-        height = 460;
+    var width = 860,
+        height = 550;
 
     //create new svg container for the map!!!! woooohoooo0ooo I LOVE SCALABLE VECTOR GRAPHICS!!!!!
     var map = d3.select("body")
@@ -18,9 +18,9 @@ function setMap(){
     //create Albers equal area conic projection centered on Madison!
     var projection = d3.geoAlbers()
         .center([0, 43.073280])
-        .rotate([89.400600, 0, 0]) //yeah no shit ARE YOU FUCKING KIDDING ME 
+        .rotate([89.395, 0, 0]) //yeah no shit ARE YOU FUCKING KIDDING ME 
         .parallels([33, 53]) 
-        .scale(1300000) //higher number good for me since my scale is real small (it's just Madison after all!)
+        .scale(1100000) //higher number good for me since my scale is real small (it's just Madison after all!)
         //I thought maybe scale needed to be way higher bc stuff wasn't showing up and dimensions seemed small when inspecting
         //however, no matter how high I made the number, the map still did not show up (dimensions did change tho which is good)
         .translate([width/2, height/2]); //"Keep these as one-half the <svg> width and height to keep your map centered in the container."
