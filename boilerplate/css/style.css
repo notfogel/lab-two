@@ -1,5 +1,10 @@
 .cityLimitz {
+    fill: none;
+    stroke: black;
+    stroke-width: 2px;
+}
+.neighborhoodz{
     fill: black;
-    stroke: #CCC;
+    stroke: black;
     stroke-width: 2px;
 }
