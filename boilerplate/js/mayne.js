@@ -34,20 +34,20 @@ function setMap(){
     var promises = [d3.csv("data/lab2_quant_data.csv"),                    
                     d3.json("data/madison_city_limit.topojson"),
                     d3.json("data/madison_neighborhood_polygonz.topojson"),
-                    d3.json("data/madison_water.topojson")                   
+                    d3.json("data/madison_water.topojson"),     
     ];    
     Promise.all(promises).then(callback); 
 
     function callback(data){
         var csvData = data[0],
             madtown = data[1],
-            campus = data[2];
+            campus = data[2],
             water = data[3];
         
         //translate the topojsons to geojson (waste of time alert)
         var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit),
             madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features,
-            madisonWater = topojson.feature(water, water.objects.madison_water);    
+            madisonWater = topojson.feature(water, water.objects.madison_water);
         
         
         //add madison's city limitz to the map
