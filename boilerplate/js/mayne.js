@@ -77,7 +77,7 @@
 
             var colorScale = makeColorScale(csvData); //call makeColorScale fxn
             
-            setEnumerationUnits(madisonNeighborhoodz,map,path);
+            setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale);
 
         } //end of callback fxn
 
@@ -150,17 +150,24 @@
         return madisonNeighborhoodz;    
     };//end of joinData (which doesn't work yet! need 2 figure out where/how it gets called)
     
-    function setEnumerationUnits(madisonNeighborhoodz,map,path){
+    function setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale){
         //add near-campus neighborhoodz to said map
         var neighborhoodz = map.selectAll(".neighborhoodz")
             .data(madisonNeighborhoodz)
             .enter()
             .append("path")
             .attr("class", function (d) {
-                return "neighborhoodz " + d.properties.id; //I'm wondering if this ID bullshit is causing all this
-                //but it shouldn't be!! both the topojson and the csv have it as a property. grrrrrrrrrrr
+                return "neighborhoodz " + d.properties.id; 
             })
-            .attr("d", path);
-    
-    }
-})();
+            .attr("d", path)
+            .style("fill",function(d){ //populates the enumeration units with their choropleth appropri8 colorz! 
+                var value = d.properties[expressed];
+                if(value){
+                    return colorScale(d.properties[expressed]);    
+                } else{
+                    return "#ccc";
+                }
+            });
+    };
+})(); //end of anonymous wrapper fxn
+//hey it's jasper, not even a wrapper, only on this script to make my racks load faster
