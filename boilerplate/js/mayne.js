@@ -3,7 +3,15 @@
 
     //pseudo-global variables
     //varz for data join (update these as I update the csv)
-    var attrArray = ["Count","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment"];
+    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment"];
+        var formatted_attrArray = []; //formatting thing is a work in progress, don't need it to turn activity 10 in, just making note
+    console.log(attrArray.length)
+    for(i=0;i<attrArray.length;i++){
+        formatted_attrArray.push(attrArray[i].replace("_"," "))
+        console.log(formatted_attrArray)
+
+    };
+        
     var expressed = attrArray[0]; //initial attribute
     //begin da script when window loads
     window.onload = setMap();
@@ -210,7 +218,42 @@
             }).style("fill",function(d){
                 return colorScale(d[expressed]);
             });
-    };
+        
+        //annot8 barz w/ attvalue text (yay!!!!!!)
+        //keep an eye on the structure of this code when trying to implement lake labels for map (other things too probably)
+        var numbers = chart.selectAll(".numbers")
+            .data(csvData)
+            .enter()
+            .append("text")
+            .sort(function(a,b){
+                return b[expressed] - a[expressed]
+            })
+            .attr("class",function(d){
+                return "numbers " + d.id;
+            })
+            .attr("text-anchor", "middle")
+            .attr("x",function(d,i){
+                var fraction = chartWidth/csvData.length
+                return i * fraction + (fraction-1)/2;
+            })
+            .attr("y",function(d){
+                return chartHeight - yScale(parseFloat(d[expressed])) + 15;
+            })
+            .text(function(d){
+                return d[expressed];
+            });
+
+        //create text elmt for chart title
+        var chartTitle = chart.append("text")
+            .attr("x",20)
+            .attr("y",40)
+            .attr("class","chartTitle")
+            .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded)
+            //gonna require a little csv doctoring AND then re-harmonizing
+            console.log(expressed)
+
+
+    }; //end of setChart
  
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
