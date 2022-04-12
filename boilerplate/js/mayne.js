@@ -2,7 +2,8 @@
 (function(){    
 
     //pseudo-global variables
-    var attrArray = ["varA", "varB", "varC", "varD", "varE"]; //list of attributes
+    //varz for data join (update these as I update the csv)
+    var attrArray = ["Count","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment"];
     var expressed = attrArray[0]; //initial attribute
     //begin da script when window loads
     window.onload = setMap();
@@ -51,38 +52,15 @@
                 campus = data[2],
                 water = data[3];
             
-            console.log(csvData)
-            console.log(campus)
+            //console.log(csvData)
+            //console.log(campus)
+            
             //translate the topojsons to geojson (waste of time alert)
             var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit),
                 madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features,
                 madisonWater = topojson.feature(water, water.objects.madison_water);
             
-            //varz for data join
-            var attrArray = ["Count","Percent of total", "Percent white", "Percent nonwhite", "Percent house", "Percent apartment"];
 
-            //loop thru csv to assign each set of csv attributes to a geojson neighborhood
-            for(var i=0; i<csvData.length; i++){
-                var csvNeighborhood = csvData[i]; //current neighborhood
-                var csvKey = csvNeighborhood.id;
-                //(this should b fun) loop thru geojson neighborhoodz to find the current one
-                for(var a=0; a<madisonNeighborhoodz.length; a++){
-
-                    var geojsonProps = madisonNeighborhoodz[a].properties; //the current geojson properties
-                    var geojsonKey = geojsonProps.id; //the geojson primary key
-
-                    //where primary keyz match, transfer csv data to geojson properties object 
-                    if(geojsonKey==csvKey){
-
-                        //assign all attributes & values
-                        attrArray.forEach(function(attr){
-                            var val = parseFloat(csvNeighborhood[attr]); //cop that csv attr value
-                            geojsonProps[attr] = val; //assign attribute & value to geojson properties
-                        });
-                    };
-                };
-            };
-            console.log(madisonNeighborhoodz)
             //add madison's city limitz to the map
             var cityLimitz = map.append("path")
                 .datum(madisonBoundariez)
@@ -93,16 +71,53 @@
                 .datum(madisonWater)
                 .attr("class", "lakez")
                 .attr("d", path);
-            //add near-campus neighborhoodz to said map
-            var neighborhoodz = map.selectAll(".neighborhoodz")
-                .data(madisonNeighborhoodz)
-                .enter()
-                .append("path")
-                .attr("class", function(d){
-                    return "neighborhoodz " + d.properties.id; //I'm wondering if this ID bullshit is causing all this
-                    //but it shouldn't be!! both the topojson and the csv have it as a property. grrrrrrrrrrr
-                }) 
-                .attr("d", path);
-        }
-    };
+            //let's do some linkage!!
+            madisonNeighborhoodz = joinData(madisonNeighborhoodz,csvData); //call joinData fxn
+            console.log(madisonNeighborhoodz)
+
+            setEnumerationUnits(madisonNeighborhoodz,map,path);
+
+
+
+        } //end of callback fxn
+
+    }; //end of setMap
+    function joinData(madisonNeighborhoodz,csvData){
+        //loop thru csv to assign each set of csv attributes to a geojson neighborhood
+        for (var i = 0; i < csvData.length; i++) {
+            var csvNeighborhood = csvData[i]; //current neighborhood
+            var csvKey = csvNeighborhood.id;
+            //(this should b fun) loop thru geojson neighborhoodz to find the current one
+            for (var a = 0; a < madisonNeighborhoodz.length; a++) {
+
+                var geojsonProps = madisonNeighborhoodz[a].properties; //the current geojson properties
+                var geojsonKey = geojsonProps.id; //the geojson primary key
+
+                //where primary keyz match, transfer csv data to geojson properties object 
+                if (geojsonKey == csvKey) {
+
+                    //assign all attributes & values
+                    attrArray.forEach(function (attr) {
+                        var val = parseFloat(csvNeighborhood[attr]); //cop that csv attr value
+                        geojsonProps[attr] = val; //assign attribute & value to geojson properties
+                    });
+                };
+            };
+        };
+        return madisonNeighborhoodz;    
+    };//end of joinData (which doesn't work yet! need 2 figure out where/how it gets called)
+    
+    function setEnumerationUnits(madisonNeighborhoodz,map,path){
+        //add near-campus neighborhoodz to said map
+        var neighborhoodz = map.selectAll(".neighborhoodz")
+            .data(madisonNeighborhoodz)
+            .enter()
+            .append("path")
+            .attr("class", function (d) {
+                return "neighborhoodz " + d.properties.id; //I'm wondering if this ID bullshit is causing all this
+                //but it shouldn't be!! both the topojson and the csv have it as a property. grrrrrrrrrrr
+            })
+            .attr("d", path);
+    
+    }
 })();
