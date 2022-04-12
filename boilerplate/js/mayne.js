@@ -25,7 +25,7 @@
             
         //create Albers equal area conic projection centered on Madison!
         var projection = d3.geoAlbers()
-            .center([0, 43.073280])
+            .center([0, 43.071])
             .rotate([89.399, 0, 0])  
             .parallels([33, 53]) 
             .scale(950000) 
