@@ -75,13 +75,56 @@
             madisonNeighborhoodz = joinData(madisonNeighborhoodz,csvData); //call joinData fxn
             console.log(madisonNeighborhoodz)
 
+            var colorScale = makeColorScale(csvData); //call makeColorScale fxn
+            
             setEnumerationUnits(madisonNeighborhoodz,map,path);
-
-
 
         } //end of callback fxn
 
     }; //end of setMap
+
+    //ok ok so let's get some colors!!
+    function makeColorScale(data){
+        
+        var colorClasses = [
+            "#D4B9DA",
+            "#C994C7",
+            "#DF65B0",
+            "#DD1C77",
+            "#980043"
+        ];
+
+        //create color scale gener8or
+        var colorScale = d3.scaleThreshold()
+            .range(colorClasses);
+
+        //build array containing all values of the expressed attribute 
+        var domainArray = [];
+        for(var i=0; i<data.length; i++){
+            var val = parseFloat(data[i][expressed]);
+            domainArray.push(val);
+        };
+        
+        //cluster data w/ ckmeans clustering algoryhthm 
+        var clusters = ss.ckmeans(domainArray,5);
+        console.log(clusters) //check console to see that clusters/groups were created (should be a nested array)
+
+        //reset domain array to cluster minimums
+        domainArray = clusters.map(function(d){
+            return d3.min(d);
+        });
+        
+        //remove 1st value from domain array to create class breakpts
+        domainArray.shift();
+
+        //assign array of last 4 cluster mins as domain
+        colorScale.domain(domainArray);
+        
+        //bring it allllll together
+        return colorScale;
+    }; //end of makeColorScale
+
+    //fxn name self-explanatory: joins geoJSON data w/ csv(attr) data
     function joinData(madisonNeighborhoodz,csvData){
         //loop thru csv to assign each set of csv attributes to a geojson neighborhood
         for (var i = 0; i < csvData.length; i++) {
