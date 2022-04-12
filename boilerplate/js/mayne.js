@@ -181,7 +181,36 @@
             .attr("width",chartWidth)
             .attr("height",chartHeight)
             .attr("class","chart");    
-    }
 
+        //cre8 scale which sizes the bars proportionally to frame
+        var yScale = d3.scaleLinear()
+            .range([0,chartHeight])
+            .domain([0,105]);
+
+        //set bars for each neighborhood
+        var bars = chart.selectAll(".bars")
+            .data(csvData)
+            .enter()
+            .append("rect")
+            .sort(function(a,b){ //sorts the bars from greatest to least
+                return b[expressed] - a[expressed] //to change sorting order, switch a&b
+            })
+            .attr("class",function(d){
+                return "bars " + d.id;
+            })
+            .attr("width",chartWidth/csvData.length - 1)
+            .attr("x", function(d,i){ //sets bars to the right of the prev bar
+                return i * (chartWidth/csvData.length);
+            })
+            .attr("height",function(d){
+                return yScale(parseFloat(d[expressed]));
+            })
+            .attr("y",function(d){ //this fxn prevents the bars from growing from the top
+                return chartHeight - yScale(parseFloat(d[expressed]))
+            }).style("fill",function(d){
+                return colorScale(d[expressed]);
+            });
+    };
+ 
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
