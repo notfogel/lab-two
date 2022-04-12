@@ -11,9 +11,9 @@
     //set up a choropleth map
     function setMap(){
         
-        //map frame dimensions
-        var width = 860,
-            height = 550;
+        //map frame dimensions 
+        var width = window.innerWidth * 0.5,
+            height = 460;
 
         //create new svg container for the map!!!! woooohoooo0ooo I LOVE SCALABLE VECTOR GRAPHICS!!!!!
         var map = d3.select("body")
@@ -26,11 +26,9 @@
         //create Albers equal area conic projection centered on Madison!
         var projection = d3.geoAlbers()
             .center([0, 43.073280])
-            .rotate([89.395, 0, 0]) //yeah no shit ARE YOU FUCKING KIDDING ME 
+            .rotate([89.399, 0, 0])  
             .parallels([33, 53]) 
-            .scale(1100000) //higher number good for me since my scale is real small (it's just Madison after all!)
-            //I thought maybe scale needed to be way higher bc stuff wasn't showing up and dimensions seemed small when inspecting
-            //however, no matter how high I made the number, the map still did not show up (dimensions did change tho which is good)
+            .scale(950000) 
             .translate([width/2, height/2]); //"Keep these as one-half the <svg> width and height to keep your map centered in the container."
         
 
@@ -77,7 +75,9 @@
 
             var colorScale = makeColorScale(csvData); //call makeColorScale fxn
             
-            setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale);
+            setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale); //call enumerator fxn
+
+            setChart(csvData,colorScale); //add coordin8ed vis to the map    
 
         } //end of callback fxn
 
@@ -150,7 +150,7 @@
         return madisonNeighborhoodz;    
     };//end of joinData (which doesn't work yet! need 2 figure out where/how it gets called)
     
-    function setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale){
+    function setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale){ //fxn name self explanatory
         //add near-campus neighborhoodz to said map
         var neighborhoodz = map.selectAll(".neighborhoodz")
             .data(madisonNeighborhoodz)
@@ -169,5 +169,19 @@
                 }
             });
     };
+
+    function setChart(csvData,colorScale){
+        //chart frame dimensions:
+        var chartWidth = window.innerWidth * 0.425,
+            chartHeight = 460;
+
+        //create a 2nd svg elmt for the chart
+        var chart = d3.select("body")
+            .append("svg")
+            .attr("width",chartWidth)
+            .attr("height",chartHeight)
+            .attr("class","chart");    
+    }
+
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
