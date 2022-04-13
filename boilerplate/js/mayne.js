@@ -1,18 +1,29 @@
 //1st line should be an anonymous fxn containing everything else I guess!    
 (function(){    
 
-    //pseudo-global variables
+    //pseudo-global variables!!!!!!!!!!!!!
     //varz for data join (update these as I update the csv)
     var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment"];
-        var formatted_attrArray = []; //formatting thing is a work in progress, don't need it to turn activity 10 in, just making note
-    console.log(attrArray.length)
+    //var formatted_attrArray = []; //formatting thing is a work in progress, don't need it to turn activity 10 in, just making note
+    //console.log(attrArray.length)
+    /* trying to get it to rip the underscores out without splitting at spaces for displaying above chart -- incomplete
     for(i=0;i<attrArray.length;i++){
         formatted_attrArray.push(attrArray[i].replace("_"," "))
         console.log(formatted_attrArray)
 
-    };
-        
+    }; */
+    //pseudo-global varz cont.
+    //chart frame dimensions:
+    var chartWidth = window.innerWidth * 0.425,
+        chartHeight = 460;
+    //cre8 scale which sizes the bars proportionally to frame
+    var yScale = d3.scaleLinear()
+        .range([0, chartHeight])
+        .domain([0, 105]);
+
     var expressed = attrArray[0]; //initial attribute
+
+
     //begin da script when window loads
     window.onload = setMap();
 
@@ -180,9 +191,6 @@
     };
 
     function setChart(csvData,colorScale){
-        //chart frame dimensions:
-        var chartWidth = window.innerWidth * 0.425,
-            chartHeight = 460;
 
         //create a 2nd svg elmt for the chart
         var chart = d3.select("body")
@@ -190,11 +198,6 @@
             .attr("width",chartWidth)
             .attr("height",chartHeight)
             .attr("class","chart");    
-
-        //cre8 scale which sizes the bars proportionally to frame
-        var yScale = d3.scaleLinear()
-            .range([0,chartHeight])
-            .domain([0,105]);
 
         //set bars for each neighborhood
         var bars = chart.selectAll(".bars")
@@ -216,7 +219,8 @@
             })
             .attr("y",function(d){ //this fxn prevents the bars from growing from the top
                 return chartHeight - yScale(parseFloat(d[expressed]))
-            }).style("fill",function(d){
+            })
+            .style("fill",function(d){
                 return colorScale(d[expressed]);
             });
         
@@ -292,12 +296,32 @@
                 return "#ccc";
             }
         });
+        //sort,resize,&recolor barz
+        var bars = d3.selectAll(".bars")
+            .sort(function(a,b){
+                return b[expressed] - a[expressed];
+            })
+            .attr("x",function(d,i){
+                return i * (chartWidth/csvData.length) //examples have some other shit in here that I don't? just a note in case i'm wrong
+            })
+            .attr("height",function(d){
+                return yScale(parseFloat(d[expressed]));
+            })
+            .attr("y",function(d){ //this fxn prevents the bars from growing from the top
+                return chartHeight - yScale(parseFloat(d[expressed]))
+            })
+            .style("fill",function(d){
+                var value = d[expressed];
+                if(value){
+                    return colorScale(value);
+                }else{
+                    return "#ccc";
+                }
+            });
 
 
 
-
-
-    }
+    }; //end of changeAttribute
 
 
 
