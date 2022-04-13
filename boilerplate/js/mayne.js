@@ -87,6 +87,7 @@
 
             setChart(csvData,colorScale); //add coordin8ed vis to the map    
 
+            createDropdown(csvData);
         } //end of callback fxn
 
     }; //end of setMap
@@ -254,6 +255,53 @@
 
 
     }; //end of setChart
- 
+    
+    //out here creating a dropdown menu!!!!!!!!!!!!!!
+    function createDropdown(csvData){
+        var dropdown = d3.select("body") //add select element 
+            .append("select")
+            .attr("class","dropdown")
+            .on("change",function(){
+                changeAttribute(this.value,csvData)
+            });
+        
+        var titleOption = dropdown.append("option") //add initial option
+            .attr("class","titleOption")
+            .attr("disabled","true")
+            .text("Select Attribute!");
+
+        var attrOptions = dropdown.selectAll("attrOptions")
+            .data(attrArray)
+            .enter()
+            .append("option")
+            .attr("value",function(d){ return d })
+            .text(function(d){ return d});   
+    };//end of createDropdown
+
+    //make that dropdown menu actually do some shit!!!!
+    function changeAttribute(attribute,csvData) {
+        expressed = attribute; //change the expressed attribute
+
+        var colorScale = makeColorScale(csvData); //recre8 color scale
+
+        var neighborhoodz = d3.selectAll(".neighborhoodz").style("fill",function(d){
+            var value = d.properties[expressed];
+            if (value){
+                return colorScale(d.properties[expressed])
+            }else{
+                return "#ccc";
+            }
+        });
+
+
+
+
+
+    }
+
+
+
+
+
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
