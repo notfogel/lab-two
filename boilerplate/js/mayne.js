@@ -272,7 +272,7 @@
         var titleOption = dropdown.append("option") //add initial option
             .attr("class","titleOption")
             .attr("disabled","true")
-            .text("Select Attribute!");
+            .text("Select attribute!"); //this maybe sounds awkward in context, so uh, maybe change later
 
         var attrOptions = dropdown.selectAll("attrOptions")
             .data(attrArray)
@@ -288,19 +288,27 @@
 
         var colorScale = makeColorScale(csvData); //recre8 color scale
 
-        var neighborhoodz = d3.selectAll(".neighborhoodz").style("fill",function(d){
-            var value = d.properties[expressed];
-            if (value){
-                return colorScale(d.properties[expressed])
-            }else{
-                return "#ccc";
-            }
+        var neighborhoodz = d3.selectAll(".neighborhoodz")
+            .transition() //add animation
+            .duration(1000) //set animation settings or whartever
+            .style("fill",function(d){
+                var value = d.properties[expressed];
+                if (value){
+                    return colorScale(d.properties[expressed])
+                }else{
+                    return "#ccc";
+                }
         });
         //sort,resize,&recolor barz
         var bars = d3.selectAll(".bars")
             .sort(function(a,b){
                 return b[expressed] - a[expressed];
             })
+            .transition() //add animation
+            .delay(function(d,i){ //add cutesy delay 
+                return i * 20
+            })
+            .duration(500) //set transition animation duration or whateva
             .attr("x",function(d,i){
                 return i * (chartWidth/csvData.length) 
             })
