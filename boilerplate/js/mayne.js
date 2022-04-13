@@ -221,9 +221,9 @@
                 return chartHeight - yScale(parseFloat(d[expressed]))
             })
             .style("fill",function(d){
-                return colorScale(d[expressed]);
-            });
-        
+                return colorScale(d[expressed]); 
+            }); 
+            
         //annot8 barz w/ attvalue text (yay!!!!!!)
         //keep an eye on the structure of this code when trying to implement lake labels for map (other things too probably)
         var numbers = chart.selectAll(".numbers")
@@ -256,7 +256,7 @@
             .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded)
             //gonna require a little csv doctoring AND then re-harmonizing
             console.log(expressed)
-
+        
 
     }; //end of setChart
     
@@ -302,7 +302,7 @@
                 return b[expressed] - a[expressed];
             })
             .attr("x",function(d,i){
-                return i * (chartWidth/csvData.length) //examples have some other shit in here that I don't? just a note in case i'm wrong
+                return i * (chartWidth/csvData.length) 
             })
             .attr("height",function(d){
                 return yScale(parseFloat(d[expressed]));
@@ -317,15 +317,10 @@
                 }else{
                     return "#ccc";
                 }
-            });
-
-
-
+            }); 
+            
     }; //end of changeAttribute
 
-
-
-
-
+ 
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
