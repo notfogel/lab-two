@@ -3,7 +3,7 @@
 
     //pseudo-global variables!!!!!!!!!!!!!
     //varz for data join (update these as I update the csv)
-    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment"];
+    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment","percent_firstYear","percent_secondYear","percent_thirdYear","percent_fourthYear","percent_fifthYear","percent_grad","percent_f_SA","percent_f_A","percent_f_N","percent_f_D","percent_f_SD","percent_c_SA","percent_c_A","percent_c_N","percent_c_D","percent_c_SD","percent_bi","percent_gay","percent_queer","percent_lesbian","percent_pan","percent_nonbinary","percent_GNC","percent_demi","percent_trans","percent_ace","percent_closeted","percent_genderqueer","percent_het","percent_polysexual","percent_bicurious","percent_questioning","percent_intersex","percent_otherIdentity","percent_preferNotToSay_identity","percent_affordability","percent_proximity","percent_friends","percent_senseOfCmty","percent_likeminded","percent_org","percent_facilities","percent_GIH","percent_otherReason"];
     //var formatted_attrArray = []; //formatting thing is a work in progress, don't need it to turn activity 10 in, just making note
     //console.log(attrArray.length)
     /* trying to get it to rip the underscores out without splitting at spaces for displaying above chart -- incomplete
