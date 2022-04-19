@@ -94,7 +94,7 @@
 
             var colorScale = makeColorScale(csvData); //call makeColorScale fxn
             
-            setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale); //call enumerator fxn
+            setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale,projection); //call enumerator fxn
 
             setChart(csvData,colorScale); //add coordin8ed vis to the map    
 
@@ -170,7 +170,7 @@
         return madisonNeighborhoodz;    
     };//end of joinData (which doesn't work yet! need 2 figure out where/how it gets called)
     
-    function setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale){ //fxn name self explanatory
+    function setEnumerationUnits(madisonNeighborhoodz,map,path,colorScale,projection){ //fxn name self explanatory
         //add near-campus neighborhoodz to said map
         var neighborhoodz = map.selectAll(".neighborhoodz")
             .data(madisonNeighborhoodz)
@@ -192,7 +192,28 @@
                 highlight(d.properties);
                 
             })
-    };
+            /*
+            //create neighborhood labels!!!
+            var neighborhood_labelz = map.selectAll(".neighborhood_labelz")
+            .data(madisonNeighborhoodz)
+            .enter()
+            .append("text")
+            .attr("class", function (d) {
+                return "neighborhood_labelz d" + d.properties.id; 
+            })
+            .text(function(d){
+                d.properties.id
+            })
+            .attr("transform",function(d){
+                console.log(d.geometry.coordinates)
+
+                var location = d.geometry.coordinates,
+                    x = projection(location[0][0][0])
+                    y = projection(location[0][0][1]);
+                return "translate(" + x + "," + y + ")";
+            }) */
+
+    };//end of setEnumerationUnits
 
     function setChart(csvData,colorScale){
 
