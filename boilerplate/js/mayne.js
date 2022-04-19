@@ -177,7 +177,7 @@
             .enter()
             .append("path")
             .attr("class", function (d) {
-                return "neighborhoodz " + d.properties.id; 
+                return "neighborhoodz d" + d.properties.id; 
             })
             .attr("d", path)
             .style("fill",function(d){ //populates the enumeration units with their choropleth appropri8 colorz! 
@@ -190,7 +190,8 @@
             })
             .on("mouseover", function(event,d) { //makes the highlighting in the highlight fxn happen
                 highlight(d.properties);
-            });
+                
+            })
     };
 
     function setChart(csvData,colorScale){
@@ -211,7 +212,7 @@
                 return b[expressed] - a[expressed] //to change sorting order, switch a&b
             })
             .attr("class",function(d){
-                return "bars " + d.id;
+                return "bars d" + d.id;
             })
             .attr("width",chartWidth/csvData.length - 1)
             .attr("x", function(d,i){ //sets bars to the right of the prev bar
@@ -261,7 +262,7 @@
             .attr("class","chartTitle")
             .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded)
             //gonna require a little csv doctoring AND then re-harmonizing
-            console.log(expressed)
+            //console.log(expressed)
         
 
     }; //end of setChart
@@ -338,10 +339,12 @@
     //highlight fxn!
     function highlight(props){
         //console.log(props)
-        var selected = d3.selectAll("." + props.id) //change stroke
+        //so I think it's this d3.selectAll that's tripping me up here. but why? 
+        var selected = d3.selectAll(".d" + props.id) //change stroke
             .style("stroke","blue") //blue and 2 for width are the defaults; perhaps change 
             .style("stroke-width","2");
+        console.log(selected)
     };
- 
+    
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
