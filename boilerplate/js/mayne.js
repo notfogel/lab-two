@@ -183,10 +183,13 @@
             .style("fill",function(d){ //populates the enumeration units with their choropleth appropri8 colorz! 
                 var value = d.properties[expressed];
                 if(value){
-                    return colorScale(d.properties[expressed]);    
+                    return colorScale(value);    
                 } else{
                     return "#ccc";
                 }
+            })
+            .on("mouseover", function(event,d) { //makes the highlighting in the highlight fxn happen
+                highlight(d.properties);
             });
     };
 
@@ -222,6 +225,9 @@
             })
             .style("fill",function(d){
                 return colorScale(d[expressed]); 
+            })
+            .on("mouseover",function(event,d){ //makes the highlight fxn for the bsars work
+                highlight(d);
             }); 
             
         //annot8 barz w/ attvalue text (yay!!!!!!)
@@ -329,6 +335,13 @@
             
     }; //end of changeAttribute
 
+    //highlight fxn!
+    function highlight(props){
+        //console.log(props)
+        var selected = d3.selectAll("." + props.id) //change stroke
+            .style("stroke","blue") //blue and 2 for width are the defaults; perhaps change 
+            .style("stroke-width","2");
+    };
  
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
