@@ -192,9 +192,18 @@
                 highlight(d.properties);
                 
             })
-            /*
-            //create neighborhood labels!!!
-            var neighborhood_labelz = map.selectAll(".neighborhood_labelz")
+            .on("mouseout",function(event,d){ //event listener for the dehighlight fxn w/ the neighborhoodz
+                dehighlight(d.properties);
+            });
+        var desc = neighborhoodz.append("desc")
+            .text('{"stroke": "#000", "stroke-width": "0.5px"}');      
+            
+            
+
+
+        /* will do this tmrw in class, keeping commented out for now
+        //create neighborhood labels!!!
+        var neighborhood_labelz = map.selectAll(".neighborhood_labelz")
             .data(madisonNeighborhoodz)
             .enter()
             .append("text")
@@ -250,9 +259,12 @@
             })
             .on("mouseover",function(event,d){ //makes the highlight fxn for the bsars work
                 highlight(d);
+            })
+            .on("mouseout",function(event,d){ //event listener to dehighlight the barz
+                dehighlight(d);
             }); 
-            
-        //annot8 barz w/ attvalue text (yay!!!!!!)
+        var desc = bars.append("desc")
+            .text('{"stroke": "none", "stroke-width": "0px"}');        //annot8 barz w/ attvalue text (yay!!!!!!)
         //keep an eye on the structure of this code when trying to implement lake labels for map (other things too probably)
         var numbers = chart.selectAll(".numbers")
             .data(csvData)
@@ -365,6 +377,26 @@
             .style("stroke","blue") //blue and 2 for width are the defaults; perhaps change 
             .style("stroke-width","2");
         console.log(selected)
+    };//end of highlight fxn
+
+    //fxn to reset the elmt style upon mouseout
+    function dehighlight(props){
+        var selected = d3.selectAll(".d" + props.id) 
+            .style("stroke",function(){
+                return getStyle(this, "stroke")
+            })
+            .style("stroke-width", function(){
+                return getStyle(this, "stroke-width")
+            });
+        function getStyle(element,styleName){
+            var styleText = d3.select(element)
+                .select("desc")
+                .text(); //sets desc to blank(?) so it's got something to reset to
+            
+            var styleObject = JSON.parse(styleText);
+
+            return styleObject[styleName];
+        };
     };
     
 })(); //end of anonymous wrapper fxn
