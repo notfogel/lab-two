@@ -268,6 +268,7 @@
             .on("mousemove",moveLabel); 
         var desc = bars.append("desc")
             .text('{"stroke": "none", "stroke-width": "0px"}');        //annot8 barz w/ attvalue text (yay!!!!!!)
+        
         //keep an eye on the structure of this code when trying to implement lake labels for map (other things too probably)
         var numbers = chart.selectAll(".numbers")
             .data(csvData)
@@ -408,9 +409,10 @@
 
     //fxn to create dynamic labels!
     function setLabel(props){
-        console.log("yo!")
+        //console.log("yo!")
         //line below this populates the label content
         var labelAttribute = "<h1>" + props[expressed] + "</h1><b>" + expressed + "</b>";
+        console.log(expressed)
         //line below this creates an infoLabel div
         var infoLabel = d3.select("body")
             .append("div")
@@ -418,27 +420,31 @@
             .attr("id", props.id + "_label") //may have to add that d prefix to this line later
             .html(labelAttribute);
         
-        var neighborhoodName = infoLabel.append("div")
-            .attr("class","labelName")
-            .html(props.Name); //I'm assuming it's case sensitive, my column is Name with uppercase so we'll start there
-    };//end of setLabel
+        var neighborhoodName = infoLabel.append("div").attr("class", "labelName").html(props.Name);    
+        };//end of setLabel
 
     //fxn for moving the labelz w/ mouse
     function moveLabel(){
-        //get label width
-        var labelWidth = d3.select(".infoLabel").node().getBoundingClientRect().width;
-
-        //using the coordinates of the mousemove event 2 set label coordin8s
+        //get width of label
+        var labelWidth = d3.select(".infoLabel")
+            .node()
+            .getBoundingClientRect()
+            .width;
+    
+        //use coordinates of mousemove event to set label coordinates
         var x1 = event.clientX + 10,
             y1 = event.clientY - 75,
             x2 = event.clientX - labelWidth - 10,
-            y2 = event.clientY + 25;        
-        //horiz label coordinate, 
-
-
+            y2 = event.clientY + 25;
+    
+        //horizontal label coordinate, testing for overflow
+        var x = event.clientX > window.innerWidth - labelWidth - 20 ? x2 : x1; 
+        //vertical label coordinate, testing for overflow
+        var y = event.clientY < 75 ? y2 : y1; 
+    
         d3.select(".infoLabel")
             .style("left", x + "px")
-            .style("right", y + "px");
+            .style("top", y + "px");
     };//end of moveLabel
     
 })(); //end of anonymous wrapper fxn
