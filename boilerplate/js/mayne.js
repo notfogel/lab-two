@@ -3,7 +3,7 @@
 
     //pseudo-global variables!!!!!!!!!!!!!
     //varz for data join (update these as I update the csv)
-    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment","percent_firstYear","percent_secondYear","percent_thirdYear","percent_fourthYear","percent_fifthYear","percent_grad","percent_f_SA","percent_f_A","percent_f_N","percent_f_D","percent_f_SD","percent_c_SA","percent_c_A","percent_c_N","percent_c_D","percent_c_SD","percent_bi","percent_gay","percent_queer","percent_lesbian","percent_pan","percent_nonbinary","percent_GNC","percent_demi","percent_trans","percent_ace","percent_closeted","percent_genderqueer","percent_het","percent_polysexual","percent_bicurious","percent_questioning","percent_intersex","percent_otherIdentity","percent_preferNotToSay_identity","percent_affordability","percent_proximity","percent_friends","percent_senseOfCmty","percent_likeminded","percent_org","percent_facilities","percent_GIH","percent_otherReason"];
+    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment","Percent_first_year_students","Percent_second_year_students","Percent_third_year_students","Percent_fourth_year_students","Percent_fifth_year_students","Percent_grad_students","Percent_Strongly_Agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_Agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_Neither_agree_nor_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_neither_agree_nor_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","percent_bi","percent_gay","percent_queer","percent_lesbian","percent_pan","percent_nonbinary","percent_GNC","percent_demi","percent_trans","percent_ace","percent_closeted","percent_genderqueer","percent_het","percent_polysexual","percent_bicurious","percent_questioning","percent_intersex","percent_otherIdentity","percent_preferNotToSay_identity","percent_affordability","percent_proximity","percent_friends","percent_senseOfCmty","percent_likeminded","percent_org","percent_facilities","percent_GIH","percent_otherReason"];
     //var formatted_attrArray = []; //formatting thing is a work in progress, don't need it to turn activity 10 in, just making note
     //console.log(attrArray.length)
     /* trying to get it to rip the underscores out without splitting at spaces for displaying above chart -- incomplete
@@ -332,7 +332,8 @@
             .attr("x",55)
             .attr("y",40)
             .attr("class","chartTitle")
-            .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
+            .text(expressed.replaceAll("_"," ") + " in each neighborhood"); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
+            //.text(function(d){ return attrArray });
             //gonna require a little csv doctoring AND then re-harmonizing
             //console.log(expressed)
         
@@ -341,9 +342,9 @@
 
         //place axis
         var axis = chart.append("g")
-        .attr("class", "axis")
-        .attr("transform", translate)
-        .call(yAxis);
+            .attr("class", "axis")
+            .attr("transform", translate)
+            .call(yAxis);
 
         //create frame for chart border
         var chartFrame = chart.append("rect")
@@ -421,6 +422,9 @@
                     return "#ccc";
                 }
             }); 
+
+        var chartTitle = d3.select(".chartTitle")
+            .text(expressed.replaceAll("_"," ") + " in each neighborhood");
             
     }; //end of changeAttribute
 
