@@ -16,7 +16,7 @@
     //chart frame dimensions:
     var chartWidth = window.innerWidth * 0.425,
         chartHeight = 460, //maybe switch to 473
-        leftPadding = 25,
+        leftPadding = 50,
         rightPadding = 2,
         topBottomPadding = 5,
         chartInnerWidth = chartWidth - leftPadding - rightPadding,
@@ -26,7 +26,7 @@
     //cre8 scale which sizes the bars proportionally to frame
     // commenting out the OG yScale but leaving its existence in tact
     var yScale = d3.scaleLinear()
-        .range([0, chartHeight])
+        .range([chartHeight,0 ])
         .domain([0, 105]);
     /*
     var yScale = d3.scaleLinear()
@@ -329,7 +329,7 @@
 
         //create text elmt for chart title
         var chartTitle = chart.append("text")
-            .attr("x",40)
+            .attr("x",55)
             .attr("y",40)
             .attr("class","chartTitle")
             .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
@@ -404,14 +404,14 @@
                 return i * 20
             })
             .duration(500) //set transition animation duration or whateva
-            .attr("x",function(d,i){
-                return i * (chartWidth/csvData.length) 
+            .attr("x", function(d, i){
+                return i * (chartInnerWidth / csvData.length) + leftPadding;
             })
-            .attr("height",function(d){
-                return yScale(parseFloat(d[expressed]));
+            .attr("height", function(d, i){
+                return 463 - yScale(parseFloat(d[expressed]));
             })
-            .attr("y",function(d){ //this fxn prevents the bars from growing from the top
-                return chartHeight - yScale(parseFloat(d[expressed]))
+            .attr("y", function(d, i){
+                return yScale(parseFloat(d[expressed])) + topBottomPadding;
             })
             .style("fill",function(d){
                 var value = d[expressed];

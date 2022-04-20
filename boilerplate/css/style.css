@@ -32,7 +32,7 @@
 }
 .chartTitle {
     font-family: sans-serif;
-    font-size: 1.1em; /* this means 1.1x the size of the element */
+    font-size: 1em; /* this means 1.1x the size of the element */
     font-weight: bold;
 }
 .dropdown {
