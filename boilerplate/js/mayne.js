@@ -15,11 +15,23 @@
     //pseudo-global varz cont.
     //chart frame dimensions:
     var chartWidth = window.innerWidth * 0.425,
-        chartHeight = 460;
+        chartHeight = 460, //maybe switch to 473
+        leftPadding = 25,
+        rightPadding = 2,
+        topBottomPadding = 5,
+        chartInnerWidth = chartWidth - leftPadding - rightPadding,
+        chartInnerHeight = chartHeight - topBottomPadding * 2,
+        translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
+
     //cre8 scale which sizes the bars proportionally to frame
+    /* commenting out the OG yScale but leaving its existence in tact
     var yScale = d3.scaleLinear()
         .range([0, chartHeight])
         .domain([0, 105]);
+    */
+    var yScale = d3.scaleLinear()
+        .range([463, 0])
+        .domain([0, 100]);
 
     var expressed = attrArray[0]; //initial attribute
 
@@ -77,7 +89,7 @@
                 madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features,
                 madisonWater = topojson.feature(water, water.objects.madison_water);
             
-
+            //console.log(madisonNeighborhoodz)
             //add madison's city limitz to the map
             var cityLimitz = map.append("path")
                 .datum(madisonBoundariez)
@@ -90,7 +102,7 @@
                 .attr("d", path);
             //let's do some linkage!!
             madisonNeighborhoodz = joinData(madisonNeighborhoodz,csvData); //call joinData fxn
-            console.log(madisonNeighborhoodz)
+            
 
             var colorScale = makeColorScale(csvData); //call makeColorScale fxn
             
@@ -127,7 +139,7 @@
         
         //cluster data w/ ckmeans clustering algoryhthm 
         var clusters = ss.ckmeans(domainArray,5);
-        console.log(clusters) //check console to see that clusters/groups were created (should be a nested array)
+        //console.log(clusters) //check console to see that clusters/groups were created (should be a nested array)
 
         //reset domain array to cluster minimums
         domainArray = clusters.map(function(d){
@@ -189,7 +201,8 @@
                 }
             })
             .on("mouseover", function(event,d) { //makes the highlighting in the highlight fxn happen
-                highlight(d.properties);
+                highlight(d.properties)
+                //console.log(d.properties);
                 
             })
             .on("mouseout",function(event,d){ //event listener for the dehighlight fxn w/ the neighborhoodz
@@ -200,7 +213,7 @@
         var desc = neighborhoodz.append("desc")
             .text('{"stroke": "#000", "stroke-width": "0.5px"}');      
             
-            
+        
 
 
         /* will do this tmrw in class, keeping commented out for now
@@ -234,7 +247,12 @@
             .attr("width",chartWidth)
             .attr("height",chartHeight)
             .attr("class","chart");    
-
+        //create a rectangle for chart background fill
+        var chartBackground = chart.append('rect')
+            .attr("class", "chartBackground")
+            .attr("width", chartInnerWidth)
+            .attr("height", chartInnerHeight)
+            .attr("transform", translate);
         //set bars for each neighborhood
         var bars = chart.selectAll(".bars")
             .data(csvData)
@@ -246,6 +264,7 @@
             .attr("class",function(d){
                 return "bars d" + d.id;
             })
+            /* og attributes
             .attr("width",chartWidth/csvData.length - 1)
             .attr("x", function(d,i){ //sets bars to the right of the prev bar
                 return i * (chartWidth/csvData.length);
@@ -259,6 +278,21 @@
             .style("fill",function(d){
                 return colorScale(d[expressed]); 
             })
+            end OG attributes */
+            //new attributes suited for an axis
+            .attr("width", chartInnerWidth / csvData.length - 1)
+            .attr("x", function(d, i){
+                return i * (chartInnerWidth / csvData.length) + leftPadding;
+            })
+            .attr("height", function(d, i){
+                return 463 - yScale(parseFloat(d[expressed]));
+            })
+            .attr("y", function(d, i){
+                return yScale(parseFloat(d[expressed])) + topBottomPadding;
+            })
+            .style("fill", function(d){
+                return colorScale(d[expressed]);
+            })
             .on("mouseover",function(event,d){ //makes the highlight fxn for the bsars work
                 highlight(d);
             })
@@ -270,6 +304,7 @@
             .text('{"stroke": "none", "stroke-width": "0px"}');        //annot8 barz w/ attvalue text (yay!!!!!!)
         
         //keep an eye on the structure of this code when trying to implement lake labels for map (other things too probably)
+        /*
         var numbers = chart.selectAll(".numbers")
             .data(csvData)
             .enter()
@@ -290,17 +325,33 @@
             })
             .text(function(d){
                 return d[expressed];
-            });
+            }); */
 
         //create text elmt for chart title
         var chartTitle = chart.append("text")
-            .attr("x",20)
+            .attr("x",40)
             .attr("y",40)
             .attr("class","chartTitle")
             .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded)
             //gonna require a little csv doctoring AND then re-harmonizing
             //console.log(expressed)
         
+        //create vertical axis generator
+        var yAxis = d3.axisLeft().scale(yScale);
+
+        //place axis
+        var axis = chart.append("g")
+        .attr("class", "axis")
+        .attr("transform", translate)
+        .call(yAxis);
+
+        //create frame for chart border
+        var chartFrame = chart.append("rect")
+            .attr("class", "chartFrame")
+            .attr("width", chartInnerWidth)
+            .attr("height", chartInnerHeight)
+            .attr("transform", translate);
+
 
     }; //end of setChart
     
@@ -375,12 +426,11 @@
 
     //highlight fxn!
     function highlight(props){
-        console.log(props)
         //so I think it's this d3.selectAll that's tripping me up here. but why? 
         var selected = d3.selectAll(".d" + props.id) //change stroke
             .style("stroke","blue") //blue and 2 for width are the defaults; perhaps change 
             .style("stroke-width","2");
-        
+        //.log(selected)
         setLabel(props); //calls the label fxn
     };//end of highlight fxn
 
@@ -411,16 +461,18 @@
     function setLabel(props){
         //console.log("yo!")
         //line below this populates the label content
+        
+
         var labelAttribute = "<h1>" + props[expressed] + "</h1><b>" + expressed + "</b>";
-        console.log(expressed)
         //line below this creates an infoLabel div
         var infoLabel = d3.select("body")
             .append("div")
             .attr("class","infoLabel")
             .attr("id", props.id + "_label") //may have to add that d prefix to this line later
             .html(labelAttribute);
-        
-        var neighborhoodName = infoLabel.append("div").attr("class", "labelName").html(props.Name);    
+        //console.log(props)
+        var neighborhoodName = infoLabel.append("div").attr("class", "neighborhoodName").html(props.Name)
+        //console.log(properties)     
         };//end of setLabel
 
     //fxn for moving the labelz w/ mouse
