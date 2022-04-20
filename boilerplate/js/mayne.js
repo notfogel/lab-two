@@ -3,7 +3,7 @@
 
     //pseudo-global variables!!!!!!!!!!!!!
     //varz for data join (update these as I update the csv)
-    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment","Percent_first_year_students","Percent_second_year_students","Percent_third_year_students","Percent_fourth_year_students","Percent_fifth_year_students","Percent_grad_students","Percent_strongly_agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_Neither_agree_nor_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_neither_agree_nor_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","percent_bi","percent_gay","percent_queer","percent_lesbian","percent_pan","percent_nonbinary","percent_GNC","percent_demi","percent_trans","percent_ace","percent_closeted","percent_genderqueer","percent_het","percent_polysexual","percent_bicurious","percent_questioning","percent_intersex","percent_otherIdentity","percent_preferNotToSay_identity","percent_affordability","percent_proximity","percent_friends","percent_senseOfCmty","percent_likeminded","percent_org","percent_facilities","percent_GIH","percent_otherReason"];
+    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment","Percent_first_year_students","Percent_second_year_students","Percent_third_year_students","Percent_fourth_year_students","Percent_fifth_year_students","Percent_grad_students","Percent_strongly_agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_Neither_agree_nor_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_neither_agree_nor_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_bi","Percent_gay","Percent_queer","Percent_lesbian","Percent_pan","Percent_nonbinary","Percent_GNC","Percent_demi","Percent_trans","Percent_ace","Percent_closeted","Percent_genderqueer","Percent_het","Percent_polysexual","Percent_bicurious","Percent_questioning","Percent_intersex","Percent_other_identity","Percent_prefer_not_to_say_their_identity","Percent_affordability","Percent_proximity","Percent_friends","Percent_sense_of_community","Percent_likeminded","Percent_org","Percent_facilities","Percent_gender_inclusive_housing","Percent_otherReason"];
     //var formatted_attrArray = []; //formatting thing is a work in progress, don't need it to turn activity 10 in, just making note
     //console.log(attrArray.length)
     /* trying to get it to rip the underscores out without splitting at spaces for displaying above chart -- incomplete
@@ -332,7 +332,7 @@
             .attr("x",55)
             .attr("y",40)
             .attr("class","chartTitle")
-            .text(expressed.replaceAll("_"," ") + " in each neighborhood"); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
+            .text(expressed.replaceAll("_"," ")); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
             //.text(function(d){ return attrArray });
             //gonna require a little csv doctoring AND then re-harmonizing
             //console.log(expressed)
@@ -375,7 +375,7 @@
             .enter()
             .append("option")
             .attr("value",function(d){ return d })
-            .text(function(d){ return d.replaceAll("_"," ")});   
+            .text(function(d){ return d.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/")});   
     };//end of createDropdown
 
     //make that dropdown menu actually do some shit!!!!
@@ -424,7 +424,7 @@
             }); 
 
         var chartTitle = d3.select(".chartTitle")
-            .text(expressed.replaceAll("_"," ") + " in each neighborhood");
+            .text(expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/"));
             
     }; //end of changeAttribute
 
@@ -465,9 +465,7 @@
     function setLabel(props){
         //console.log("yo!")
         //line below this populates the label content
-        
-
-        var labelAttribute = "<h1>" + props[expressed] + "</h1><b>" + expressed + "</b>";
+        var labelAttribute = "<h1>" + props[expressed].toFixed(2) + "</h1><b>" + expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/") + "</b>";
         //line below this creates an infoLabel div
         var infoLabel = d3.select("body")
             .append("div")
@@ -476,7 +474,7 @@
             .html(labelAttribute);
         //console.log(props)
         var neighborhoodName = infoLabel.append("div").attr("class", "neighborhoodName").html(props.Name)
-        //console.log(properties)     
+        console.log(neighborhoodName)     
         };//end of setLabel
 
     //fxn for moving the labelz w/ mouse
