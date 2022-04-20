@@ -194,7 +194,9 @@
             })
             .on("mouseout",function(event,d){ //event listener for the dehighlight fxn w/ the neighborhoodz
                 dehighlight(d.properties);
-            });
+            })
+            .on("mousemove",moveLabel);
+        //creates a desc container for the highlight event
         var desc = neighborhoodz.append("desc")
             .text('{"stroke": "#000", "stroke-width": "0.5px"}');      
             
@@ -262,7 +264,8 @@
             })
             .on("mouseout",function(event,d){ //event listener to dehighlight the barz
                 dehighlight(d);
-            }); 
+            })
+            .on("mousemove",moveLabel); 
         var desc = bars.append("desc")
             .text('{"stroke": "none", "stroke-width": "0px"}');        //annot8 barz w/ attvalue text (yay!!!!!!)
         //keep an eye on the structure of this code when trying to implement lake labels for map (other things too probably)
@@ -418,7 +421,25 @@
         var neighborhoodName = infoLabel.append("div")
             .attr("class","labelName")
             .html(props.Name); //I'm assuming it's case sensitive, my column is Name with uppercase so we'll start there
-    };
+    };//end of setLabel
+
+    //fxn for moving the labelz w/ mouse
+    function moveLabel(){
+        //get label width
+        var labelWidth = d3.select(".infoLabel").node().getBoundingClientRect().width;
+
+        //using the coordinates of the mousemove event 2 set label coordin8s
+        var x1 = event.clientX + 10,
+            y1 = event.clientY - 75,
+            x2 = event.clientX - labelWidth - 10,
+            y2 = event.clientY + 25;        
+        //horiz label coordinate, 
+
+
+        d3.select(".infoLabel")
+            .style("left", x + "px")
+            .style("right", y + "px");
+    };//end of moveLabel
     
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
