@@ -371,12 +371,13 @@
 
     //highlight fxn!
     function highlight(props){
-        //console.log(props)
+        console.log(props)
         //so I think it's this d3.selectAll that's tripping me up here. but why? 
         var selected = d3.selectAll(".d" + props.id) //change stroke
             .style("stroke","blue") //blue and 2 for width are the defaults; perhaps change 
             .style("stroke-width","2");
-        console.log(selected)
+        
+        setLabel(props); //calls the label fxn
     };//end of highlight fxn
 
     //fxn to reset the elmt style upon mouseout
@@ -396,7 +397,27 @@
             var styleObject = JSON.parse(styleText);
 
             return styleObject[styleName];
-        };
+        };//end of getStyle
+        //remove infoLabel
+        d3.select(".infoLabel").remove();
+
+    };//end of dehighlight fxn
+
+    //fxn to create dynamic labels!
+    function setLabel(props){
+        console.log("yo!")
+        //line below this populates the label content
+        var labelAttribute = "<h1>" + props[expressed] + "</h1><b>" + expressed + "</b>";
+        //line below this creates an infoLabel div
+        var infoLabel = d3.select("body")
+            .append("div")
+            .attr("class","infoLabel")
+            .attr("id", props.id + "_label") //may have to add that d prefix to this line later
+            .html(labelAttribute);
+        
+        var neighborhoodName = infoLabel.append("div")
+            .attr("class","labelName")
+            .html(props.Name); //I'm assuming it's case sensitive, my column is Name with uppercase so we'll start there
     };
     
 })(); //end of anonymous wrapper fxn
