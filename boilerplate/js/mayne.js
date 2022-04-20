@@ -24,15 +24,15 @@
         translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 
     //cre8 scale which sizes the bars proportionally to frame
-    /* commenting out the OG yScale but leaving its existence in tact
+    // commenting out the OG yScale but leaving its existence in tact
     var yScale = d3.scaleLinear()
         .range([0, chartHeight])
         .domain([0, 105]);
-    */
+    /*
     var yScale = d3.scaleLinear()
         .range([463, 0])
         .domain([0, 100]);
-
+*/
     var expressed = attrArray[0]; //initial attribute
 
 
@@ -332,7 +332,7 @@
             .attr("x",40)
             .attr("y",40)
             .attr("class","chartTitle")
-            .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded)
+            .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
             //gonna require a little csv doctoring AND then re-harmonizing
             //console.log(expressed)
         
