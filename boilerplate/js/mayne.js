@@ -81,15 +81,15 @@
                 campus = data[2],
                 water = data[3];
             
-            //console.log(csvData)
             //console.log(campus)
             
-            //translate the topojsons to geojson (waste of time alert)
-            var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit),
-                madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhoodz_incl_dormz).features,
-                madisonWater = topojson.feature(water, water.objects.madison_water);
-            
+            //translate the topojsons to geojson 
+            var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit)
+            var madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhoodz_incl_dormz).features
             console.log(madisonNeighborhoodz)
+            var madisonWater = topojson.feature(water, water.objects.madison_water)
+            
+            //console.log(madisonNeighborhoodz)
             //add madison's city limitz to the map
             var cityLimitz = map.append("path")
                 .datum(madisonBoundariez)
