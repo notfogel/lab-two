@@ -3,23 +3,36 @@
 
     //pseudo-global variables!!!!!!!!!!!!!
     //varz for data join (update these as I update the csv)
-    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment","percent_firstYear","percent_secondYear","percent_thirdYear","percent_fourthYear","percent_fifthYear","percent_grad","percent_f_SA","percent_f_A","percent_f_N","percent_f_D","percent_f_SD","percent_c_SA","percent_c_A","percent_c_N","percent_c_D","percent_c_SD","percent_bi","percent_gay","percent_queer","percent_lesbian","percent_pan","percent_nonbinary","percent_GNC","percent_demi","percent_trans","percent_ace","percent_closeted","percent_genderqueer","percent_het","percent_polysexual","percent_bicurious","percent_questioning","percent_intersex","percent_otherIdentity","percent_preferNotToSay_identity","percent_affordability","percent_proximity","percent_friends","percent_senseOfCmty","percent_likeminded","percent_org","percent_facilities","percent_GIH","percent_otherReason"];
+    var attrArray = ["Number_of_students","Percent_of_total", "Percent_white", "Percent_nonwhite", "Percent_house", "Percent_apartment", "Percent_dorm", "Percent_first_year_students","Percent_second_year_students","Percent_third_year_students","Percent_fourth_year_students","Percent_fifth_year_students","Percent_grad_students","Percent_strongly_agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_agree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_Neither_agree_nor_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_feels_LGBTQ+_Inclusive","Percent_strongly_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_agree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_neither_agree_nor_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_strongly_disagree:_My_Neighborhood_could_be_more_LGBTQ+_Inclusive","Percent_bi","Percent_gay","Percent_queer","Percent_lesbian","Percent_pan","Percent_nonbinary","Percent_GNC","Percent_demi","Percent_trans","Percent_ace","Percent_closeted","Percent_genderqueer","Percent_het","Percent_polysexual","Percent_bicurious","Percent_questioning","Percent_intersex","Percent_other_identity","Percent_prefer_not_to_say_their_identity","Percent_affordability","Percent_proximity","Percent_friends","Percent_sense_of_community","Percent_likeminded","Percent_org","Percent_facilities","Percent_gender_inclusive_housing","Percent_otherReason"];
     //var formatted_attrArray = []; //formatting thing is a work in progress, don't need it to turn activity 10 in, just making note
     //console.log(attrArray.length)
     /* trying to get it to rip the underscores out without splitting at spaces for displaying above chart -- incomplete
     for(i=0;i<attrArray.length;i++){
         formatted_attrArray.push(attrArray[i].replace("_"," "))
         console.log(formatted_attrArray)
+
     }; */
     //pseudo-global varz cont.
     //chart frame dimensions:
     var chartWidth = window.innerWidth * 0.425,
-        chartHeight = 460;
-    //cre8 scale which sizes the bars proportionally to frame
-    var yScale = d3.scaleLinear()
-        .range([0, chartHeight])
-        .domain([0, 105]);
+        chartHeight = 460, //maybe switch to 473
+        leftPadding = 50,
+        rightPadding = 2,
+        topBottomPadding = 5,
+        chartInnerWidth = chartWidth - leftPadding - rightPadding,
+        chartInnerHeight = chartHeight - topBottomPadding * 2,
+        translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 
+    //cre8 scale which sizes the bars proportionally to frame
+    // commenting out the OG yScale but leaving its existence in tact
+    var yScale = d3.scaleLinear()
+        .range([chartHeight,0 ])
+        .domain([0, 105]);
+    /*
+    var yScale = d3.scaleLinear()
+        .range([463, 0])
+        .domain([0, 100]);
+*/
     var expressed = attrArray[0]; //initial attribute
 
 
@@ -54,7 +67,7 @@
             .projection(projection);
 
 
-        //use Promise.all to parallelize asynchronous data loading (ok this block seems redundant for sure lol FUCK)
+        //use Promise.all to parallelize asynchronous data loading
         var promises = [d3.csv("data/lab2_quant_data.csv"),                    
                         d3.json("data/madison_city_limit.topojson"),
                         d3.json("data/madison_neighborhood_polygonz.topojson"),
@@ -68,15 +81,15 @@
                 campus = data[2],
                 water = data[3];
             
-            //console.log(csvData)
             //console.log(campus)
             
-            //translate the topojsons to geojson (waste of time alert)
-            var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit),
-                madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features,
-                madisonWater = topojson.feature(water, water.objects.madison_water);
+            //translate the topojsons to geojson 
+            var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit)
+            var madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features
+            console.log(madisonNeighborhoodz)
+            var madisonWater = topojson.feature(water, water.objects.madison_water)
             
-
+            //console.log(madisonNeighborhoodz)
             //add madison's city limitz to the map
             var cityLimitz = map.append("path")
                 .datum(madisonBoundariez)
@@ -89,7 +102,7 @@
                 .attr("d", path);
             //let's do some linkage!!
             madisonNeighborhoodz = joinData(madisonNeighborhoodz,csvData); //call joinData fxn
-            console.log(madisonNeighborhoodz)
+            
 
             var colorScale = makeColorScale(csvData); //call makeColorScale fxn
             
@@ -126,7 +139,7 @@
         
         //cluster data w/ ckmeans clustering algoryhthm 
         var clusters = ss.ckmeans(domainArray,5);
-        console.log(clusters) //check console to see that clusters/groups were created (should be a nested array)
+        //console.log(clusters) //check console to see that clusters/groups were created (should be a nested array)
 
         //reset domain array to cluster minimums
         domainArray = clusters.map(function(d){
@@ -188,7 +201,8 @@
                 }
             })
             .on("mouseover", function(event,d) { //makes the highlighting in the highlight fxn happen
-                highlight(d.properties);
+                highlight(d.properties)
+                //console.log(d.properties);
                 
             })
             .on("mouseout",function(event,d){ //event listener for the dehighlight fxn w/ the neighborhoodz
@@ -199,7 +213,7 @@
         var desc = neighborhoodz.append("desc")
             .text('{"stroke": "#000", "stroke-width": "0.5px"}');      
             
-            
+        
 
 
         /* will do this tmrw in class, keeping commented out for now
@@ -216,6 +230,7 @@
             })
             .attr("transform",function(d){
                 console.log(d.geometry.coordinates)
+
                 var location = d.geometry.coordinates,
                     x = projection(location[0][0][0])
                     y = projection(location[0][0][1]);
@@ -232,7 +247,12 @@
             .attr("width",chartWidth)
             .attr("height",chartHeight)
             .attr("class","chart");    
-
+        //create a rectangle for chart background fill
+        var chartBackground = chart.append('rect')
+            .attr("class", "chartBackground")
+            .attr("width", chartInnerWidth)
+            .attr("height", chartInnerHeight)
+            .attr("transform", translate);
         //set bars for each neighborhood
         var bars = chart.selectAll(".bars")
             .data(csvData)
@@ -244,6 +264,7 @@
             .attr("class",function(d){
                 return "bars d" + d.id;
             })
+            /* og attributes
             .attr("width",chartWidth/csvData.length - 1)
             .attr("x", function(d,i){ //sets bars to the right of the prev bar
                 return i * (chartWidth/csvData.length);
@@ -256,6 +277,21 @@
             })
             .style("fill",function(d){
                 return colorScale(d[expressed]); 
+            })
+            end OG attributes */
+            //new attributes suited for an axis
+            .attr("width", chartInnerWidth / csvData.length - 1)
+            .attr("x", function(d, i){
+                return i * (chartInnerWidth / csvData.length) + leftPadding;
+            })
+            .attr("height", function(d, i){
+                return 463 - yScale(parseFloat(d[expressed]));
+            })
+            .attr("y", function(d, i){
+                return yScale(parseFloat(d[expressed])) + topBottomPadding;
+            })
+            .style("fill", function(d){
+                return colorScale(d[expressed]);
             })
             .on("mouseover",function(event,d){ //makes the highlight fxn for the bsars work
                 highlight(d);
@@ -293,13 +329,30 @@
 
         //create text elmt for chart title
         var chartTitle = chart.append("text")
-            .attr("x",20)
+            .attr("x",55)
             .attr("y",40)
             .attr("class","chartTitle")
-            .text("Number of LGBTQ+-identifying students " + " in each neighborhood"); //fix this line later (it's kinda hardcoded)
+            .text(expressed.replaceAll("_"," ")); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
+            //.text(function(d){ return attrArray });
             //gonna require a little csv doctoring AND then re-harmonizing
             //console.log(expressed)
         
+        //create vertical axis generator
+        var yAxis = d3.axisLeft().scale(yScale);
+
+        //place axis
+        var axis = chart.append("g")
+            .attr("class", "axis")
+            .attr("transform", translate)
+            .call(yAxis);
+
+        //create frame for chart border
+        var chartFrame = chart.append("rect")
+            .attr("class", "chartFrame")
+            .attr("width", chartInnerWidth)
+            .attr("height", chartInnerHeight)
+            .attr("transform", translate);
+
 
     }; //end of setChart
     
@@ -322,7 +375,7 @@
             .enter()
             .append("option")
             .attr("value",function(d){ return d })
-            .text(function(d){ return d});   
+            .text(function(d){ return d.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/")});   
     };//end of createDropdown
 
     //make that dropdown menu actually do some shit!!!!
@@ -352,14 +405,14 @@
                 return i * 20
             })
             .duration(500) //set transition animation duration or whateva
-            .attr("x",function(d,i){
-                return i * (chartWidth/csvData.length) 
+            .attr("x", function(d, i){
+                return i * (chartInnerWidth / csvData.length) + leftPadding;
             })
-            .attr("height",function(d){
-                return yScale(parseFloat(d[expressed]));
+            .attr("height", function(d, i){
+                return 463 - yScale(parseFloat(d[expressed]));
             })
-            .attr("y",function(d){ //this fxn prevents the bars from growing from the top
-                return chartHeight - yScale(parseFloat(d[expressed]))
+            .attr("y", function(d, i){
+                return yScale(parseFloat(d[expressed])) + topBottomPadding;
             })
             .style("fill",function(d){
                 var value = d[expressed];
@@ -369,17 +422,19 @@
                     return "#ccc";
                 }
             }); 
+
+        var chartTitle = d3.select(".chartTitle")
+            .text(expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/"));
             
     }; //end of changeAttribute
 
     //highlight fxn!
     function highlight(props){
-        console.log(props)
         //so I think it's this d3.selectAll that's tripping me up here. but why? 
         var selected = d3.selectAll(".d" + props.id) //change stroke
             .style("stroke","blue") //blue and 2 for width are the defaults; perhaps change 
             .style("stroke-width","2");
-        
+        //.log(selected)
         setLabel(props); //calls the label fxn
     };//end of highlight fxn
 
@@ -410,16 +465,16 @@
     function setLabel(props){
         //console.log("yo!")
         //line below this populates the label content
-        var labelAttribute = "<h1>" + props[expressed] + "</h1><b>" + expressed + "</b>";
-        console.log(expressed)
+        var labelAttribute = "<h1>" + props[expressed].toFixed(2) + "</h1><b>" + expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/") + "</b>";
         //line below this creates an infoLabel div
         var infoLabel = d3.select("body")
             .append("div")
             .attr("class","infoLabel")
             .attr("id", props.id + "_label") //may have to add that d prefix to this line later
             .html(labelAttribute);
-        
-        var neighborhoodName = infoLabel.append("div").attr("class", "labelName").html(props.Name);    
+        //console.log(props)
+        var neighborhoodName = infoLabel.append("div").attr("class", "neighborhoodName").html(props.Name)
+        console.log(neighborhoodName)     
         };//end of setLabel
 
     //fxn for moving the labelz w/ mouse
