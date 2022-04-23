@@ -67,10 +67,10 @@
             .projection(projection);
 
 
-        //use Promise.all to parallelize asynchronous data loading (ok this block seems redundant for sure lol FUCK)
+        //use Promise.all to parallelize asynchronous data loading
         var promises = [d3.csv("data/lab2_quant_data.csv"),                    
                         d3.json("data/madison_city_limit.topojson"),
-                        d3.json("data/madison_neighborhood_polygonz.topojson"),
+                        d3.json("data/madison_neighborhoodz_incl_dormz.topojson"),
                         d3.json("data/madison_water.topojson"),     
         ];    
         Promise.all(promises).then(callback); 
@@ -86,10 +86,10 @@
             
             //translate the topojsons to geojson (waste of time alert)
             var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit),
-                madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhood_polygonz).features,
+                madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhoodz_incl_dormz).features,
                 madisonWater = topojson.feature(water, water.objects.madison_water);
             
-            //console.log(madisonNeighborhoodz)
+            console.log(madisonNeighborhoodz)
             //add madison's city limitz to the map
             var cityLimitz = map.append("path")
                 .datum(madisonBoundariez)
