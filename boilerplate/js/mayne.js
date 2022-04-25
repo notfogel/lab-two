@@ -70,7 +70,7 @@
         //use Promise.all to parallelize asynchronous data loading
         var promises = [d3.csv("data/lab2_quant_data.csv"),                    
                         d3.json("data/madison_city_limit.topojson"),
-                        d3.json("data/madison_neighborhoodz_incl_dormz.topojson"),
+                        d3.json("data/dormz.topojson"),
                         d3.json("data/madison_water.topojson"),     
         ];    
         Promise.all(promises).then(callback); 
@@ -85,7 +85,7 @@
             
             //translate the topojsons to geojson 
             var madisonBoundariez = topojson.feature(madtown, madtown.objects.madison_city_limit)
-            var madisonNeighborhoodz = topojson.feature(campus, campus.objects.madison_neighborhoodz_incl_dormz).features
+            var madisonNeighborhoodz = topojson.feature(campus, campus.objects.dormz).features
             console.log(madisonNeighborhoodz)
             var madisonWater = topojson.feature(water, water.objects.madison_water)
             
