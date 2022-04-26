@@ -71,7 +71,8 @@
         var promises = [d3.csv("data/lab2_quant_data.csv"),                    
                         d3.json("data/madison_city_limit.topojson"),
                         d3.json("data/dormz.topojson"),
-                        d3.json("data/madison_water.topojson"),     
+                        d3.json("data/madison_water.topojson"),
+                        d3.json("data/streetz.topojson")     
         ];    
         Promise.all(promises).then(callback); 
 
@@ -79,7 +80,8 @@
             var csvData = data[0],
                 madtown = data[1],
                 campus = data[2],
-                water = data[3];
+                water = data[3],
+                streetz = data[4];
             
             //console.log(campus)
             
@@ -88,6 +90,7 @@
             var madisonNeighborhoodz = topojson.feature(campus, campus.objects.dormz).features
             console.log(madisonNeighborhoodz)
             var madisonWater = topojson.feature(water, water.objects.madison_water)
+            var madisonStreetz = topojson.feature(streetz, streetz.objects.streetz)
             
             //console.log(madisonNeighborhoodz)
             //add madison's city limitz to the map
@@ -100,6 +103,11 @@
                 .datum(madisonWater)
                 .attr("class", "lakez")
                 .attr("d", path);
+            //let's add these background streetz!!
+            var roadz = map.append("path")
+                .datum(madisonStreetz)
+                .attr("class","roadz")
+                .attr("d",path);
             //let's do some linkage!!
             madisonNeighborhoodz = joinData(madisonNeighborhoodz,csvData); //call joinData fxn
             

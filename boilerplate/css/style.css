@@ -12,10 +12,12 @@
 .lakez {
     fill: #AED8DB;
 }
-/*.roadz {
-    stroke: black;
-    stroke-width: 2px;
-} */
+.roadz {
+    fill: none;
+    opacity: 100%;
+    stroke: #36454F;
+    stroke-width: 0.4px;
+} 
 .map {
     border: medium solid #999;
     margin: 10px 0 0 20px;
@@ -86,3 +88,4 @@ option {
     stroke-width: 0px;
     shape-rendering: crispEdges;
 }
+
