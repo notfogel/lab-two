@@ -133,11 +133,16 @@
             "#DD1C77",
             "#980043"
         ];
-
+        
         //create color scale gener8or
+        /* bear with me I'm gonna test out quantile
         var colorScale = d3.scaleThreshold()
             .range(colorClasses);
+        */
 
+        //create color scale gener8or
+        var colorScale = d3.scaleQuantile().range(colorClasses)
+        
         //build array containing all values of the expressed attribute 
         var domainArray = [];
         for(var i=0; i<data.length; i++){
@@ -146,16 +151,17 @@
         };
         
         //cluster data w/ ckmeans clustering algoryhthm 
-        var clusters = ss.ckmeans(domainArray,5);
+        //var clusters = ss.ckmeans(domainArray,5);
         //console.log(clusters) //check console to see that clusters/groups were created (should be a nested array)
 
+        /*
         //reset domain array to cluster minimums
         domainArray = clusters.map(function(d){
             return d3.min(d);
-        });
+        }); */
         
         //remove 1st value from domain array to create class breakpts
-        domainArray.shift();
+        //domainArray.shift();
 
         //assign array of last 4 cluster mins as domain
         colorScale.domain(domainArray);
@@ -471,9 +477,10 @@
 
     //fxn to create dynamic labels!
     function setLabel(props){
-        //console.log("yo!")
+        //console.log(parseFloat(props[expressed].toFixed(2)))
         //line below this populates the label content
-        var labelAttribute = "<h1>" + props[expressed].toFixed(2) + "</h1><b>" + expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/") + "</b>";
+        var value_expressed = parseFloat(props[expressed])
+        var labelAttribute = "<h1>" + value_expressed.toFixed(2) + "</h1><b>" + expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/") + "</b>";
         //line below this creates an infoLabel div
         var infoLabel = d3.select("body")
             .append("div")
