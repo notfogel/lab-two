@@ -1,4 +1,1 @@
-# lab-two
- D3 lab stuff!
-
- ### Buh
+[Click here to access the map!!](https://notfogel.github.io/lab-two/boilerplate/index.html)
