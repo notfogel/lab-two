@@ -532,7 +532,6 @@
             .style("top", y + "px");
     };//end of moveLabel
     
-    //would love a title for the whole thing
     
 
 
