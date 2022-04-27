@@ -119,6 +119,8 @@
             setChart(csvData,colorScale); //add coordin8ed vis to the map    
 
             createDropdown(csvData);
+
+            
         } //end of callback fxn
 
     }; //end of setMap
@@ -490,11 +492,11 @@
         //line below this populates the label content
         var value_expressed = parseFloat(props[expressed])
         var labelAttribute = "<h1>" + value_expressed.toFixed(2) + "</h1><b>" + expressed.replaceAll("_"," ")
-        .replaceAll("Percent","%")
-        .replaceAll(" nor ","/")
-        .replaceAll("GNC","gender non-conforming")
-        .replaceAll("het","heterosexual")
-        .replaceAll("org","club/org affiliation") + "</b>";
+            .replaceAll("Percent","%")
+            .replaceAll(" nor ","/")
+            .replaceAll("GNC","gender non-conforming")
+            .replaceAll("het","heterosexual")
+            .replaceAll("org","club/org affiliation") + "</b>";
         //line below this creates an infoLabel div
         var infoLabel = d3.select("body")
             .append("div")
@@ -530,5 +532,9 @@
             .style("top", y + "px");
     };//end of moveLabel
     
+    //would love a title for the whole thing
+    
+
+
 })(); //end of anonymous wrapper fxn
 //hey it's jasper, not even a wrapper, only on this script to make my racks load faster
