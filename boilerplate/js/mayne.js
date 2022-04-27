@@ -346,10 +346,8 @@
             .attr("x",55)
             .attr("y",40)
             .attr("class","chartTitle")
-            .text(expressed.replaceAll("_"," ")); //fix this line later (it's kinda hardcoded (and largely inaccurate!!!))
-            //.text(function(d){ return attrArray });
-            //gonna require a little csv doctoring AND then re-harmonizing
-            //console.log(expressed)
+            .text(expressed.replaceAll("_"," ")); 
+            
         
         //create vertical axis generator
         var yAxis = d3.axisLeft().scale(yScale);
@@ -389,7 +387,13 @@
             .enter()
             .append("option")
             .attr("value",function(d){ return d })
-            .text(function(d){ return d.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/")});   
+            .text(function(d){ return d.replaceAll("_"," ")
+                .replaceAll("Percent","%")
+                .replaceAll(" nor ","/")
+                .replaceAll("GNC","gender non-conforming")
+                .replaceAll("het","heterosexual")
+                .replaceAll("org","club/org affiliation")
+                });   
     };//end of createDropdown
 
     //make that dropdown menu actually do some shit!!!!
@@ -438,7 +442,12 @@
             }); 
 
         var chartTitle = d3.select(".chartTitle")
-            .text(expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/"));
+            .text(expressed.replaceAll("_"," ")
+            .replaceAll("Percent","%")
+            .replaceAll(" nor ","/")
+            .replaceAll("GNC","gender non-conforming")
+            .replaceAll("het","heterosexual")
+            .replaceAll("org","club/org affiliation"));
             
     }; //end of changeAttribute
 
@@ -480,7 +489,12 @@
         //console.log(parseFloat(props[expressed].toFixed(2)))
         //line below this populates the label content
         var value_expressed = parseFloat(props[expressed])
-        var labelAttribute = "<h1>" + value_expressed.toFixed(2) + "</h1><b>" + expressed.replaceAll("_"," ").replaceAll("Percent","%").replaceAll(" nor ","/") + "</b>";
+        var labelAttribute = "<h1>" + value_expressed.toFixed(2) + "</h1><b>" + expressed.replaceAll("_"," ")
+        .replaceAll("Percent","%")
+        .replaceAll(" nor ","/")
+        .replaceAll("GNC","gender non-conforming")
+        .replaceAll("het","heterosexual")
+        .replaceAll("org","club/org affiliation") + "</b>";
         //line below this creates an infoLabel div
         var infoLabel = d3.select("body")
             .append("div")
